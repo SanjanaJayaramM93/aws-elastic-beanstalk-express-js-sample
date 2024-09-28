@@ -52,10 +52,9 @@ pipeline {
             steps {
                 echo 'Initiating Snyk security scan for vulnerabilities...'
                 sh 'npm install -g snyk'
-                // Make sure to set this token in Jenkins credentials
-                withCredentials([string(credentialsId: 'snyk-token', variable:'SNYK_TOKEN')]) { 
-                   sh 'snyk auth $SNYK_TOKEN'
-        }
+                
+                // Directly using the Snyk token for authentication
+                sh 'snyk auth 54e4355f-5c0c-41fd-aae4-7bf34efedbc3'
                 echo 'Snyk authentication successful.'
                 
                 script {
@@ -101,4 +100,5 @@ pipeline {
         }
     }
 }
+
 
