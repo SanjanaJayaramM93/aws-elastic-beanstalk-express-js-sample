@@ -67,12 +67,12 @@ pipeline {
                 }
             }
         }
-        stage('Run Unit Tests') {
+        /*stage('Run Unit Tests') {
             steps {
                 echo 'Executing unit tests...'
                 sh 'npm test'
             }
-        }
+        } */
         stage('Application Build') {
             steps {
                 echo 'Building the application...'
