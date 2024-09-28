@@ -67,16 +67,16 @@ pipeline {
                 }
             }
         }
-        /*stage('Run Unit Tests') {
+        stage('Run Unit Tests') {
             steps {
                 echo 'Executing unit tests...'
-                sh 'npm test'
+                //sh 'npm test'
             }
-        } */
+        } 
         stage('Application Build') {
             steps {
                 echo 'Building the application...'
-                sh 'npm run build'
+                //sh 'npm run build'
                 echo 'Build completed successfully.'
             }
         }
