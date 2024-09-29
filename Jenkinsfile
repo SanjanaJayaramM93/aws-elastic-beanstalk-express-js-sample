@@ -49,24 +49,27 @@ pipeline {
             }
         }
         stage('Snyk Security Assessment') {
-            steps {
-                echo 'Initiating Snyk security scan for vulnerabilities...'
-                sh 'npm install -g snyk'
-                
-                // Directly using the Snyk token for authentication
-                sh 'snyk auth 54e4355f-5c0c-41fd-aae4-7bf34efedbc3'
-                echo 'Snyk authentication successful.'
-                
-                script {
-                    def snykScanResult = sh(script: 'snyk test --severity-threshold=high', returnStatus: true)
-                    if (snykScanResult != 0) {
-                        error 'Critical vulnerabilities detected by Snyk! Failing the pipeline.'
-                    } else {
-                        echo 'Snyk scan completed with no critical vulnerabilities. Proceeding...'
-                    }
+    steps {
+        echo 'Initiating Snyk security scan for vulnerabilities...'
+        sh 'npm install -g snyk'
+        
+        // Retrieve the Snyk token from Jenkins credentials
+        withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+            sh 'snyk auth ${SNYK_TOKEN}'
+            echo 'Snyk authentication successful.'
+            
+            script {
+                def snykScanResult = sh(script: 'snyk test --severity-threshold=high', returnStatus: true)
+                if (snykScanResult != 0) {
+                    error 'Critical vulnerabilities detected by Snyk! Failing the pipeline.'
+                } else {
+                    echo 'Snyk scan completed with no critical vulnerabilities. Proceeding...'
                 }
             }
         }
+    }
+}
+
         stage('Run Unit Tests') {
             steps {
                 echo 'Executing unit tests...'
